@@ -1,34 +1,17 @@
 const express = require('express');
 const app = express();
 
-app.use(express.json()); // for parsing application/json
+app.use(express.json());
 
-// POST endpoint to receive reschedule requests from VAPI
-app.post('/vapi/reschedule', (req, res) => {
-  const { candidateId, rescheduleTime, rescheduleType, eventType } = req.body;
+app.post('/collect-time', (req, res) => {
+  const { candidateID, rescheduleTime } = req.body;
+  console.log('Received:', candidateID, rescheduleTime);
 
-  // Basic validation
-  if (!candidateId || !rescheduleTime || !rescheduleType) {
-    return res.status(400).json({ error: 'Missing one or more required fields' });
-  }
+  // You can add your logic to handle the data here
 
-  // Optional: Validate ISO 8601 format for rescheduleTime
-  const isoFormat = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?Z?$/;
-  if (!isoFormat.test(rescheduleTime)) {
-    return res.status(400).json({ error: 'rescheduleTime is not in ISO format' });
-  }
-
-  // Log or process the reschedule data
-  console.log(`[${eventType || 'reschedule'}] Candidate ID: ${candidateId}`);
-  console.log(`Reschedule Time: ${rescheduleTime}`);
-  console.log(`Reschedule Type: ${rescheduleType}`);
-
-  // Respond success
-  res.json({ message: 'Reschedule request received successfully' });
+  res.status(200).json({ status: 'success' });
 });
 
-// Start the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(3000, () => {
+  console.log('Server listening on port 3000');
 });
